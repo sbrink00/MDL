@@ -4,7 +4,7 @@ from matrix import *
 from draw import *
 
 knobCommands = ["move", "rotate", "scale", "set"]
-constantCommands = ["box", "sphere", "torus"]
+threeDStuffs = ["box", "sphere", "torus"]
 
 def dc(ary):
   return [x if type(x) is not list else dc(x) for x in ary]
@@ -36,12 +36,14 @@ def run(filename):
     color = [0, 0, 0]
     tmp = new_matrix()
     ident( tmp )
-
     stack = [ [x[:] for x in tmp] ]
+    #for when there are multiple coordinate systems
+    stacks = []
+    stacks.append(stack)
     screen = new_screen()
     zbuffer = new_zbuffer()
     tmp = []
-    step_3d = 100
+    step_3d = 50
     consts = ''
     edges = []
     polygons = []
@@ -51,18 +53,20 @@ def run(filename):
                           'blue': [0.2, 0.5, 0.5]}]
     for i,command in enumerate(commands):
         c = command["op"]
-        print(i,command)
-        #print(symbols)
         reflect = ".white"
         if c in knobCommands: knob = command["knob"]
-        if c in constantCommands:
+        if c in threeDStuffs:
           const = command["constants"]
           if const != None: reflect = const
+          if command["cs"] != None: pass
         args = command["args"]
         if c == "save":
           save_extension(screen, args[0] + ".png")
+          print("Filename: " + args[0] + ".png")
           screen.clear()
         if c == "line":
+          if command["cs0"] != None: pass
+          if command["cs1"] != None: pass
           add_edge( edges,
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]) )
@@ -71,7 +75,6 @@ def run(filename):
           edges = []
         if c == "curve": pass
         if c == "sphere":
-          s = symbols[".white"] if const == None else const
           add_sphere(polygons,
                      float(args[0]), float(args[1]), float(args[2]),
                      float(args[3]), step_3d)
@@ -79,7 +82,6 @@ def run(filename):
           draw_polygons(polygons, screen, zbuffer, view, ambient, light, symbols, reflect)
           polygons = []
         if c == "box":
-          s = symbols[".white"] if const == None else const
           add_box(polygons,
                      float(args[0]), float(args[1]), float(args[2]),
                      float(args[3]), float(args[4]), float(args[5]))
@@ -88,7 +90,6 @@ def run(filename):
           polygons = []
         if c == "torus":
           const = command["constants"]
-          s = symbols[".white"] if const == None else const
           add_torus(polygons,
                      float(args[0]), float(args[1]), float(args[2]),
                      float(args[3]), float(args[4]), step_3d)
@@ -99,7 +100,6 @@ def run(filename):
           stack.pop()
         if c == "push":
           stack.append(dc(stack[-1]))
-          print("completed")
         if c == "move":
           if knob != None: pass
           t = make_translate(float(args[0]), float(args[1]), float(args[2]))
@@ -119,5 +119,11 @@ def run(filename):
           t = make_scale(float(args[0]), float(args[1]), float(args[2]))
           matrix_mult(stack[-1], t)
           stack[-1] = dc(t)
+        #it seems like the mdl.py file already does everything I need for constants
         if c == "constants": pass
-        if c == "circle": pass
+        #to be coded later
+        if c == "save_knobs": pass
+        if c == "tween": pass
+        if c == "light": pass
+        if c == "mesh": pass
+        if c == "basename": pass

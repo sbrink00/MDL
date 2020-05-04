@@ -1,0 +1,27 @@
+constants shiny_purple 0.3 0.2 0.8 0.3 0 0 0.3 0.2 0.8
+constants shiny_teal 0.3 0.0 0.0 0.3 0.2 0.8 0.3 0.2 0.8
+constants dull_yellow 0.3 0.8 0.2 0.3 0.8 0.2 0 0 0
+constants white 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 255 225 255
+constants blue 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 20 225 251
+constants green 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 155 254 85
+constants yellow 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 250 221 33
+constants orange 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 255 169 44
+constants red 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 0.4 254 59 29
+light g .5 .75 1  100 255 100
+push
+move 20 450 0
+push
+rotate x 10
+rotate y -10
+rotate z 2
+box shiny_teal 0 0 0 20 150 100
+pop
+push
+rotate x 20
+rotate z -10
+torus dull_yellow 100 -100 0 10 50
+pop
+pop
+push
+sphere shiny_purple -45 -67 -10 25
+save pic100.png
